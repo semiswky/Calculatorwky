@@ -1,100 +1,563 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D White Calculator</title>
+    <title>Bilinçlendirme Hesap Makinesi</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-            perspective: 1000px;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCADIAMgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWm5ybnJ2eoqOkpaanqKmqsrO0tba2uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlbaWmJmaoqOkpaanqKmqsrO0tba2uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/2Q==');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            perspective: 1200px;
+            overflow: hidden;
+            position: relative;
         }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .main-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
         .calculator {
-            width: 200px;
-            height: 300px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
+            background: #ffffff;
+            border-radius: 35px;
+            padding: 35px;
+            width: 100%;
+            box-shadow: 
+                0 40px 100px rgba(0, 0, 0, 0.5),
+                0 20px 50px rgba(0, 0, 0, 0.4),
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                inset 0 1px 2px rgba(255, 255, 255, 0.9),
+                0 0 0 3px rgba(0, 0, 0, 0.08);
+            transform: perspective(1500px) rotateX(6deg) rotateY(-2deg) rotateZ(0.5deg);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
         }
+
+        .calculator::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
         .calculator:hover {
-            transform: rotateY(10deg);
+            transform: perspective(1500px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            box-shadow: 
+                0 50px 120px rgba(0, 0, 0, 0.6),
+                0 25px 60px rgba(0, 0, 0, 0.5),
+                0 15px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 2px rgba(255, 255, 255, 0.9);
         }
+
+        .info-banner {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .info-banner strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .display-section {
+            margin-bottom: 30px;
+        }
+
+        .display-label {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
         .display {
-            height: 50px;
-            background: #222;
-            color: white;
+            background: linear-gradient(145deg, #f0f0f0 0%, #ffffff 100%);
+            border: 3px solid #ddd;
+            border-radius: 18px;
+            padding: 25px;
             text-align: right;
-            padding: 10px;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+            font-size: 3rem;
+            font-weight: 300;
+            color: #1a1a1a;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            word-wrap: break-word;
+            word-break: break-all;
+            box-shadow: 
+                inset 0 6px 20px rgba(0, 0, 0, 0.1),
+                inset 0 -3px 8px rgba(255, 255, 255, 0.8),
+                0 5px 15px rgba(0, 0, 0, 0.15);
+            letter-spacing: 2px;
+            overflow: hidden;
+            line-height: 1.1;
+            font-family: 'Courier New', monospace;
         }
-        .buttons {
+
+        @keyframes displayPulse {
+            0%, 100% {
+                box-shadow: 
+                    inset 0 6px 20px rgba(0, 0, 0, 0.1),
+                    inset 0 -3px 8px rgba(255, 255, 255, 0.8),
+                    0 5px 15px rgba(0, 0, 0, 0.15);
+            }
+            50% {
+                box-shadow: 
+                    inset 0 6px 20px rgba(0, 0, 0, 0.1),
+                    inset 0 -3px 8px rgba(255, 255, 255, 0.8),
+                    0 5px 15px rgba(0, 0, 0, 0.15),
+                    0 0 20px rgba(100, 150, 255, 0.3);
+            }
+        }
+
+        .buttons-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            padding: 10px;
+            gap: 15px;
         }
-        .button {
-            height: 50px;
-            background: #007bff;
-            color: white;
+
+        .btn {
+            padding: 22px;
+            font-size: 1.5rem;
+            font-weight: 800;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: 15px;
             cursor: pointer;
+            position: relative;
+            transition: all 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 
+                0 12px 35px rgba(0, 0, 0, 0.25),
+                0 5px 15px rgba(0, 0, 0, 0.2),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+                inset 0 1px 3px rgba(255, 255, 255, 0.6);
+            user-select: none;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
-        .button:active {
-            background: #0056b3;
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.7s, height 0.7s;
+            z-index: 0;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%);
+            border-radius: 15px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 2;
+            display: block;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) translateZ(0);
+            box-shadow: 
+                0 18px 45px rgba(0, 0, 0, 0.3),
+                0 8px 20px rgba(0, 0, 0, 0.25),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+                inset 0 1px 3px rgba(255, 255, 255, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(2px) translateZ(0);
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.2),
+                0 3px 10px rgba(0, 0, 0, 0.15),
+                inset 0 -1px 3px rgba(0, 0, 0, 0.15),
+                inset 0 1px 3px rgba(255, 255, 255, 0.6);
+        }
+
+        .btn:active::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn-number {
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+        }
+
+        .btn-number:hover {
+            box-shadow: 
+                0 18px 45px rgba(102, 126, 234, 0.4),
+                0 8px 20px rgba(0, 0, 0, 0.25),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+                inset 0 1px 3px rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-operator {
+            background: linear-gradient(145deg, #f093fb 0%, #f5576c 100%);
+            color: #ffffff;
+        }
+
+        .btn-operator:hover {
+            box-shadow: 
+                0 18px 45px rgba(245, 87, 108, 0.4),
+                0 8px 20px rgba(0, 0, 0, 0.25),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+                inset 0 1px 3px rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-clear {
+            background: linear-gradient(145deg, #fa709a 0%, #fee140 100%);
+            color: #ffffff;
+            grid-column: span 2;
+            font-weight: 900;
+        }
+
+        .btn-clear:hover {
+            box-shadow: 
+                0 18px 45px rgba(250, 112, 154, 0.4),
+                0 8px 20px rgba(0, 0, 0, 0.25),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+                inset 0 1px 3px rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-delete {
+            background: linear-gradient(145deg, #4facfe 0%, #00f2fe 100%);
+            color: #ffffff;
+        }
+
+        .btn-delete:hover {
+            box-shadow: 
+                0 18px 45px rgba(79, 172, 254, 0.4),
+                0 8px 20px rgba(0, 0, 0, 0.25),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+                inset 0 1px 3px rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-equals {
+            background: linear-gradient(145deg, #43e97b 0%, #38f9d7 100%);
+            color: #ffffff;
+            grid-column: span 2;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .btn-equals:hover {
+            box-shadow: 
+                0 18px 45px rgba(67, 233, 123, 0.4),
+                0 8px 20px rgba(0, 0, 0, 0.25),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+                inset 0 1px 3px rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 500px) {
+            .main-container {
+                max-width: 100%;
+            }
+
+            .calculator {
+                padding: 25px;
+                border-radius: 25px;
+            }
+
+            .display {
+                font-size: 2.2rem;
+                padding: 20px;
+                min-height: 75px;
+            }
+
+            .btn {
+                padding: 18px;
+                font-size: 1.2rem;
+                border-radius: 12px;
+            }
+
+            .buttons-grid {
+                gap: 12px;
+            }
+
+            .info-banner {
+                font-size: 0.8rem;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .calculator {
+                padding: 20px;
+            }
+
+            .display {
+                font-size: 1.8rem;
+                padding: 15px;
+                min-height: 65px;
+            }
+
+            .btn {
+                padding: 15px;
+                font-size: 1rem;
+            }
+
+            .buttons-grid {
+                gap: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="calculator">
-        <div class="display" id="display">0</div>
-        <div class="buttons">
-            <button class="button">1</button>
-            <button class="button">2</button>
-            <button class="button">3</button>
-            <button class="button">+</button>
-            <button class="button">4</button>
-            <button class="button">5</button>
-            <button class="button">6</button>
-            <button class="button">-</button>
-            <button class="button">7</button>
-            <button class="button">8</button>
-            <button class="button">9</button>
-            <button class="button">*</button>
-            <button class="button">0</button>
-            <button class="button">C</button>
-            <button class="button">=</button>
-            <button class="button">/</button>
+    <div class="main-container">
+        <div class="calculator">
+            <div class="info-banner">
+                <strong>1850'li Yıllar - Siyahlar Üzerinde Yapılan Zulüm</strong>
+                Bu hesap makinesi, ırkçılık için tasarlanmadı, gerçekler için tasarlandı.
+            </div>
+
+            <div class="display-section">
+                <div class="display-label">Sonuç</div>
+                <div class="display" id="display">0</div>
+            </div>
+
+            <div class="buttons-grid">
+                <button class="btn btn-clear" onclick="clearDisplay()" title="Tümünü Temizle">
+                    <span>C</span>
+                </button>
+                <button class="btn btn-operator" onclick="appendOperator('/')" title="Bölme">
+                    <span>÷</span>
+                </button>
+                <button class="btn btn-operator" onclick="appendOperator('*')" title="Çarpma">
+                    <span>×</span>
+                </button>
+                <button class="btn btn-delete" onclick="deleteLastChar()" title="Son Karakteri Sil">
+                    <span>⌫</span>
+                </button>
+
+                <button class="btn btn-number" onclick="appendNumber('7')">
+                    <span>7</span>
+                </button>
+                <button class="btn btn-number" onclick="appendNumber('8')">
+                    <span>8</span>
+                </button>
+                <button class="btn btn-number" onclick="appendNumber('9')">
+                    <span>9</span>
+                </button>
+                <button class="btn btn-operator" onclick="appendOperator('-')" title="Çıkarma">
+                    <span>−</span>
+                </button>
+
+                <button class="btn btn-number" onclick="appendNumber('4')">
+                    <span>4</span>
+                </button>
+                <button class="btn btn-number" onclick="appendNumber('5')">
+                    <span>5</span>
+                </button>
+                <button class="btn btn-number" onclick="appendNumber('6')">
+                    <span>6</span>
+                </button>
+                <button class="btn btn-operator" onclick="appendOperator('+')" title="Toplama">
+                    <span>+</span>
+                </button>
+
+                <button class="btn btn-number" onclick="appendNumber('1')">
+                    <span>1</span>
+                </button>
+                <button class="btn btn-number" onclick="appendNumber('2')">
+                    <span>2</span>
+                </button>
+                <button class="btn btn-number" onclick="appendNumber('3')">
+                    <span>3</span>
+                </button>
+                <button class="btn btn-number" onclick="appendNumber('00')">
+                    <span>00</span>
+                </button>
+
+                <button class="btn btn-number" onclick="appendNumber('0')" style="grid-column: span 2;">
+                    <span>0</span>
+                </button>
+                <button class="btn btn-number" onclick="appendNumber('.')">
+                    <span>.</span>
+                </button>
+                <button class="btn btn-equals" onclick="calculate()" title="Hesapla">
+                    <span>=</span>
+                </button>
+            </div>
         </div>
     </div>
-    <script>
-        let display = document.getElementById('display');
-        let buttons = document.querySelectorAll('.button');
-        let currentInput = '';
 
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                const value = this.innerText;
-                if (value === 'C') {
-                    currentInput = '';
-                    display.innerText = '0';
-                } else if (value === '=') {
-                    display.innerText = 'Ben BEYAZ bir hesap makinesiyim!';
+    <script>
+        const display = document.getElementById('display');
+        let currentInput = '0';
+        let previousInput = '';
+        let operator = null;
+        let shouldResetDisplay = false;
+
+        function updateDisplay() {
+            display.textContent = currentInput;
+        }
+
+        function appendNumber(num) {
+            if (shouldResetDisplay) {
+                currentInput = num;
+                shouldResetDisplay = false;
+            } else {
+                if (currentInput === '0' && num !== '.') {
+                    currentInput = num;
+                } else if (num === '.' && currentInput.includes('.')) {
+                    return;
                 } else {
-                    currentInput += value;
-                    display.innerText = currentInput;
+                    currentInput += num;
                 }
-            });
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            if (operator !== null && !shouldResetDisplay) {
+                calculate();
+            }
+            previousInput = currentInput;
+            operator = op;
+            shouldResetDisplay = true;
+        }
+
+        function deleteLastChar() {
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            previousInput = '';
+            operator = null;
+            shouldResetDisplay = false;
+            updateDisplay();
+        }
+
+        function playSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                console.log('Ses çalınamadı');
+            }
+        }
+
+        function calculate() {
+            playSound();
+            display.textContent = 'I am white.';
+            display.style.animation = 'displayPulse 0.5s ease-in-out';
+            
+            setTimeout(() => {
+                display.style.animation = 'none';
+            }, 500);
+            
+            currentInput = '0';
+            previousInput = '';
+            operator = null;
+            shouldResetDisplay = true;
+        }
+
+        window.addEventListener('load', () => {
+            updateDisplay();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+
+            if (key >= '0' && key <= '9') {
+                appendNumber(key);
+            } else if (key === '.') {
+                appendNumber('.');
+            } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+                appendOperator(key);
+            } else if (key === 'Enter' || key === '=') {
+                event.preventDefault();
+                calculate();
+            } else if (key === 'Backspace') {
+                event.preventDefault();
+                deleteLastChar();
+            } else if (key === 'c' || key === 'C') {
+                event.preventDefault();
+                clearDisplay();
+            }
         });
     </script>
 </body>
